@@ -48,7 +48,7 @@ test.describe("admin", () => {
   const KEEP = ["status", "tier", "tierRank", "currentPlan", "expiresAt", "featuredUntil", "validationWarnings", "rejectionReason", "reviewedAt", "reviewedBy", "submittedAt"];
 
   test.beforeAll(async ({ browser }: { browser: Browser }) => {
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect(process.env.MONGODB_URI!, { dbName: process.env.MONGODB_DB || undefined });
     const col = mongoose.connection.collection("properties");
     const docs = await col.find({ isDemo: true, status: "ACTIVE" }).sort({ code: -1 }).limit(2).toArray();
     expect(docs).toHaveLength(2);

@@ -18,6 +18,8 @@ export async function connectDB(uri = process.env.MONGODB_URI): Promise<typeof m
   if (!uri) throw new Error("MONGODB_URI is not set. Copy .env.example to .env.local.");
   if (!cache.promise) {
     cache.promise = mongoose.connect(uri, {
+      // Overrides the database in the URI path (Atlas URIs often have none).
+      ...(process.env.MONGODB_DB ? { dbName: process.env.MONGODB_DB } : {}),
       bufferCommands: false,
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 10_000,

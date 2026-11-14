@@ -63,7 +63,7 @@ test.describe("content and tools", () => {
     await page.getByRole("textbox", { name: "Message" }).fill("I want to list two plots of land in Lahan.");
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByRole("status")).toContainText("We received your message", { timeout: 20_000 });
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect(process.env.MONGODB_URI!, { dbName: process.env.MONGODB_DB || undefined });
     const lead = await mongoose.connection.collection("leads").findOne({ name });
     expect(lead?.source).toBe("CONTACT_PAGE");
     expect(lead?.message).toBe("[SELL] I want to list two plots of land in Lahan.");
@@ -128,7 +128,7 @@ test.describe("account features", () => {
   const created: mongoose.Types.ObjectId[] = [];
 
   test.beforeAll(async () => {
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect(process.env.MONGODB_URI!, { dbName: process.env.MONGODB_DB || undefined });
   });
   test.afterAll(async () => {
     await mongoose.connection.collection("properties").deleteMany({ _id: { $in: created } });

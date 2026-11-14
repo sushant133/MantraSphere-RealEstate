@@ -64,7 +64,7 @@ test.describe("payments", () => {
   }
 
   test.beforeAll(async ({ browser }: { browser: Browser }) => {
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect(process.env.MONGODB_URI!, { dbName: process.env.MONGODB_DB || undefined });
     phone = `98${String(Math.floor(Math.random() * 1e8)).padStart(8, "0")}`;
     owner = await browser.newPage();
     await login(owner, phone, "/en/dashboard");
