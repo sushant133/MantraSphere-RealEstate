@@ -1,0 +1,52 @@
+# Local development database: MongoDB 7 as a single-node replica set
+# (needed for multi-document transactions) with authentication enabled and
+# the port bound to localhost only.
+#
+#   cp .env.example .env.local   # set MONGO_ROOT_PASSWORD / MONGO_APP_PASSWORD
+#   docker compose --env-file .env.local up -d mongo
+#   npm run seed
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: mantrasphere-mongo
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27017:27017" # never expose 27017 publicly
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?set MONGO_ROOT_PASSWORD in .env.local}
+      MONGO_INITDB_DATABASE: mantrasphere
+      MONGO_APP_USER: ${MONGO_APP_USER:-msr_app}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?set MONGO_APP_PASSWORD in .env.local}
+    # A replica set with auth needs a keyfile; generate it on first start.
+    entrypoint:
+      - bash
+      - -c
+      - |
+        if [ ! -f /data/keyfile/mongo.key ]; then
+          mkdir -p /data/keyfile
+          openssl rand -base64 756 > /data/keyfile/mongo.key
+        fi
+        chmod 400 /data/keyfile/mongo.key
+        chown 999:999 /data/keyfile/mongo.key
+        exec docker-entrypoint.sh mongod --replSet rs0 --bind_ip_all --auth --keyFile /data/keyfile/mongo.key
+    volumes:
+      - mongo-data:/data/db
+      - mongo-keyfile:/data/keyfile
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/01-app-user.js:ro
+    healthcheck:
+      # Initiates the replica set on first run, then reports health.
+      test:
+        - CMD-SHELL
+        - >
+          mongosh --quiet -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval
+          "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'localhost:27017' }] }).ok }"
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  mongo-data:
+  mongo-keyfile:
