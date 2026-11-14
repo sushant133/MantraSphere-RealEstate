@@ -106,7 +106,7 @@ npm run test:e2e
 - `npm run seed -- --refresh-demo-images` swaps the photos on existing demo listings without changing their codes or links.
 - Houses get exterior, living room, kitchen, bedroom and bathroom shots; flats similar; land gets field and hillside shots (mostly from Nepal); shops and offices get commercial and office shots.
 - These are demo photos only: purge them with `npm run seed -- --purge-demo` before launch.
-- Site images in `public/images/` (home hero, "Browse by type" tiles, CTA band) are committed and come from the same CC0 set: hero = `house-09`, tiles = `house-06`, `land-10`, `flat-06`, `commercial-01`, `living-07`, CTA = `land-12` (sources in `demo-photos.json`). Replace them with the company's own photos whenever you have them; keep the `-400/-800/-1600.webp` names.
+- Site images in `public/images/`: the home hero (stone house with pool) and CTA band (house among trees) are CC0 photos from rawpixel found via Openverse; the "Browse by type" tiles reuse the demo set (`house-06`, `land-10`, `flat-06`, `commercial-01`, `living-07`, sources in `demo-photos.json`). Replace them with the company's own photos whenever you have them; keep the `-400/-800/-1600.webp` names.
 
 ## Content and PWA notes
 

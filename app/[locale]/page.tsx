@@ -34,7 +34,7 @@ import { Testimonial } from "@/models";
 export const revalidate = 60;
 
 const HERO_BLUR =
-  "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoQAAcAA4BaJZgCdAEfjG1SxAD4Y3e/T81gdiVOvenqHDO2F1XDf8xirBrnzO3bYUawgWydBY13CclIyY66cgoAAAA=";
+  "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoQAAcAA4BaJbACdAEO9etTukAA9nIXEuEpj/2sy1d2GOuE87l7iMJmn9eKACQLy56wgmTDaaUSbG8KQe3ewuIK4AAAAA==";
 
 const getTestimonials = unstable_cache(
   async () => {
@@ -114,11 +114,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           fetchPriority="high"
           placeholder="blur"
           blurDataURL={HERO_BLUR}
-          // The photo sits behind a dark overlay, so phones get the lighter 800 px file.
-          sizes="(max-width: 767px) 40vw, 100vw"
-          className="-z-10 object-cover object-[center_40%]"
+          sizes="100vw"
+          className="-z-10 object-cover object-center"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-900/90 via-navy-900/70 to-navy-900/25" aria-hidden="true" />
+        <div className="absolute inset-0 -z-10 bg-navy-900/70 md:bg-transparent md:bg-gradient-to-r md:from-navy-900/85 md:via-navy-900/55 md:to-navy-900/5" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-navy-900/60 to-transparent" aria-hidden="true" />
         <div className="container-wide flex min-h-[34rem] flex-col justify-center py-14 sm:min-h-[38rem] lg:min-h-[42rem] lg:py-20">
           <p className="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-sm font-medium text-white ring-1 ring-white/20 backdrop-blur">
@@ -353,8 +352,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       {/* ---- CTA band ---- */}
       <section aria-labelledby="cta-title" className="relative isolate -mb-16 overflow-hidden bg-navy-900">
-        <Image src="/images/cta-band-1600.webp" alt="" fill sizes="(max-width: 767px) 50vw, 100vw" className="-z-10 object-cover" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-900/95 via-navy-900/80 to-navy-900/40" aria-hidden="true" />
+        <Image src="/images/cta-band-1600.webp" alt="" fill sizes="100vw" className="-z-10 object-cover object-[center_60%]" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-900/90 via-navy-900/60 to-navy-900/15" aria-hidden="true" />
         <div className="container-wide flex flex-col items-start gap-6 py-14 text-white sm:py-20 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl">
             <h2 id="cta-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
